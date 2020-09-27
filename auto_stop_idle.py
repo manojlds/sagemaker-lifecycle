@@ -25,6 +25,7 @@ def is_kernel_idle(kernel, path):
             print(f"Kernel {kernel['id']} ({kernel['name']}) for {path} is idle")
             return True
 
+    print(f"Kernel {kernel['id']} ({kernel['name']}) for {path} is NOT idle")
     return False
 
 
@@ -61,27 +62,22 @@ conn = (
 )
 
 try:
-
     conn.request("GET", "/api/sessions")
-
     sessions_response = conn.getresponse()
 
-    data = json.loads(sessions_response.read().decode("utf-8"))
+    sessions_data = json.loads(sessions_response.read().decode("utf-8"))
 
     is_idle = False
 
     sagemaker_client = boto3.client("sagemaker")
 
-    if len(data) == 0:
-        is_idle = True
-    else:
-        all_idle_status = [
-            is_kernel_idle(session["kernel"], session["path"]) for session in data
-        ]
-        instance_uptime = check_instance_uptime()
-        instance_idle = instance_uptime > idle_timeout
-        all_idle_status.append(instance_idle)
-        is_idle = all(all_idle_status)
+    all_idle_status = [
+        is_kernel_idle(session["kernel"], session["path"]) for session in sessions_data
+    ]
+    instance_uptime = check_instance_uptime()
+    instance_idle = instance_uptime > idle_timeout
+    all_idle_status.append(instance_idle)
+    is_idle = all(all_idle_status)
 
     print(f"Notebook instance idle status: {is_idle}.")
 
