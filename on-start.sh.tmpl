@@ -19,6 +19,6 @@ SAGEMAKER_JUPYTER_IDLE_SHUTDOWN=${shutdown}
 ENV_VARS="SAGEMAKER_JUPYER_IDLE_TIME=$SAGEMAKER_JUPYTER_HOST\nSAGEMAKER_JUPYTER_PORT=$SAGEMAKER_JUPYTER_PORT\nSAGEMAKER_JUPYTER_SSL=$SAGEMAKER_JUPYTER_SSL\SAGEMAKER_JUPYTER_IDLE_TIME=$SAGEMAKER_JUPYTER_IDLE_TIME\SAGEMAKER_JUPYTER_IDLE_SHUTDOWN=$SAGEMAKER_JUPYTER_IDLE_SHUTDOWN\n"
 
 if ! (crontab -l 2>/dev/null | grep "auto_stop_idle.py"); then
-    (crontab -l 2>/dev/null; echo -e "$ENV_VARS*/5 * * * * $PWD/auto_stop_idle.py | tee -a /home/ec2-user/SageMaker/auto_stop_idle.log") | crontab -
+    (crontab -l 2>/dev/null; echo -e "$ENV_VARS*/5 * * * * /home/ec2-user/SageMaker/auto_stop_idle.py | tee -a /home/ec2-user/SageMaker/auto_stop_idle.log") | crontab -
 fi
 
