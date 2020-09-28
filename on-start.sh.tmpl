@@ -4,19 +4,19 @@ set -ex
 
 echo "Fetching auto stop script from https://raw.githubusercontent.com/manojlds/sagemaker-lifecycle/master/auto_stop_idle.py"
 
-wget -O auto_stop_idle.py https://raw.githubusercontent.com/manojlds/sagemaker-lifecycle/master/auto_stop_idle.py
+wget -O /home/ec2-user/SageMaker/auto_stop_idle.py https://raw.githubusercontent.com/manojlds/sagemaker-lifecycle/master/auto_stop_idle.py
 
-chmod +x auto_stop_idle.py
+chmod +x /home/ec2-user/SageMaker/auto_stop_idle.py
 
 echo "Setting up cron with the auto stop script"
 
 SAGEMAKER_JUPYTER_HOST=${host}
 SAGEMAKER_JUPYTER_PORT=${port}
 SAGEMAKER_JUPYTER_SSL=${ssl}
-SAGEMAKER_JUPYER_IDLE_TIME=${idle_time}
-SAGEMAKER_JUPYER_IDLE_SHUTDOWN=${shutdown}
+SAGEMAKER_JUPYTER_IDLE_TIME=${idle_time}
+SAGEMAKER_JUPYTER_IDLE_SHUTDOWN=${shutdown}
 
-ENV_VARS="SAGEMAKER_JUPYER_IDLE_TIME=$SAGEMAKER_JUPYTER_HOST\nSAGEMAKER_JUPYTER_PORT=$SAGEMAKER_JUPYTER_PORT$\nSAGEMAKER_JUPYTER_SSL=$SAGEMAKER_JUPYTER_SSL\nSAGEMAKER_JUPYER_IDLE_TIME=$SAGEMAKER_JUPYER_IDLE_TIME\nSAGEMAKER_JUPYER_IDLE_SHUTDOWN=$SAGEMAKER_JUPYER_IDLE_SHUTDOWN\n"
+ENV_VARS="SAGEMAKER_JUPYER_IDLE_TIME=$SAGEMAKER_JUPYTER_HOST\nSAGEMAKER_JUPYTER_PORT=$SAGEMAKER_JUPYTER_PORT\nSAGEMAKER_JUPYTER_SSL=$SAGEMAKER_JUPYTER_SSL\SAGEMAKER_JUPYTER_IDLE_TIME=$SAGEMAKER_JUPYTER_IDLE_TIME\SAGEMAKER_JUPYTER_IDLE_SHUTDOWN=$SAGEMAKER_JUPYTER_IDLE_SHUTDOWN\n"
 
 if ! (crontab -l 2>/dev/null | grep "auto_stop_idle.py"); then
     (crontab -l 2>/dev/null; echo -e "$ENV_VARS*/5 * * * * $PWD/auto_stop_idle.py | tee -a /home/ec2-user/SageMaker/auto_stop_idle.log") | crontab -

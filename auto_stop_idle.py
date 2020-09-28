@@ -44,8 +44,8 @@ def shutdown_instance():
 jupyter_host = os.getenv("SAGEMAKER_JUPYTER_HOST", "localhost")
 jupyter_port = int(os.getenv("SAGEMAKER_JUPYTER_PORT", "8888"))
 jupyter_ssl = os.getenv("SAGEMAKER_JUPYTER_SSL", "false") == "true"
-idle_timeout = int(os.getenv("SAGEMAKER_JUPYER_IDLE_TIME", "3600"))
-idle_shutdown = os.getenv("SAGEMAKER_JUPYER_IDLE_SHUTDOWN", "false") == "true"
+idle_timeout = int(os.getenv("SAGEMAKER_JUPYTER_IDLE_TIME", "3600"))
+idle_shutdown = os.getenv("SAGEMAKER_JUPYTER_IDLE_SHUTDOWN", "false") == "true"
 
 instance_name = (
     os.getenv("SAGEMAKER_INSTANCE_NAME")
